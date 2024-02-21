@@ -3,6 +3,7 @@ import hashlib
 import base58
 import binascii
 import sys
+import fileinput
 
 def priv2addru(private_key):
     # Step 0: string to byte-array, then to a2b_hex format
@@ -34,6 +35,8 @@ def priv2addru(private_key):
     return public_address
 
 if __name__ == '__main__':
-    private_key = sys.argv[1]
-    public_address = priv2addru(private_key)
-    print(public_address)
+    with fileinput.input() as f:
+        for line in f:
+            private_key = line.rstrip()
+            public_address = priv2addru(private_key)
+            print(public_address)
