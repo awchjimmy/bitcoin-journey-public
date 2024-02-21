@@ -1,11 +1,14 @@
-'''Private key to uncompress bitcoin address
-'''
-
 import ecdsa
 import hashlib
 import base58
+import binascii
+import sys
 
-def private_key_to_public_address(private_key):
+def priv2addru(private_key):
+    # Step 0: string to byte-array, then to a2b_hex format
+    private_key = private_key.encode('utf-8')
+    private_key = binascii.a2b_hex(private_key)
+    
     # Step 1: Generate Public Key
     sk = ecdsa.SigningKey.from_string(private_key, curve=ecdsa.SECP256k1)
     vk = sk.get_verifying_key()
@@ -30,7 +33,7 @@ def private_key_to_public_address(private_key):
     
     return public_address
 
-# Example Usage:
-private_key = b'\xe3\xb0\xc4\x42\x98\xfc\x1c\x14\x9a\xfb\xf4\xc8\x99\x6f\xb9\x24\x27\xae\x41\xe4\x64\x9b\x93\x4c\xa4\x95\x99\x1b\x78\x52\xb8\x55'
-public_address = private_key_to_public_address(private_key)
-print("Public Address:", public_address)
+if __name__ == '__main__':
+    private_key = sys.argv[1]
+    public_address = priv2addru(private_key)
+    print(public_address)
